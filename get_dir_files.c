@@ -1,25 +1,28 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-// usage   char **files = NULL; int n = 0; get_c_files(pathname, &files, n);
-void dynamic_get_files(char *pathname, char ***cfiles, int i) {
+// usage   char **files = NULL; int n =  dynamic_get_files(pathname, &files);
+int dynamic_get_files(char *pathname, char ***files) {
   DIR *dir;
+  int i = 0;
   struct dirent *ent;
   if ((dir = opendir(pathname)) != NULL) {
     while ((ent = readdir(dir)) != NULL) {
       if (ent->d_type == DT_REG) {
-        *cfiles = realloc(*cfiles, (i + 1) * sizeof(char *));
-        (*cfiles)[i] = malloc((strlen(ent->d_name)) + 1);
-        strcpy((*cfiles)[i], ent->d_name);
+        *files = (char **)realloc(*files, (i + 1) * sizeof(char *));
+        (*files)[i] = (char *)malloc((strlen(ent->d_name)) + 1);
+        strcpy((*files)[i], ent->d_name);
         i++;
       }
     }
-    printf("files[%d] = %s \n", 0, (*cfiles)[0]);
     closedir(dir);
   }
+  return i;
 }
 
 int main(int argc, char *argv[]) {

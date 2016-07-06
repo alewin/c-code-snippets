@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
   if (stream == NULL)
     exit(EXIT_FAILURE);
 
-  while (((read = getline(&line, &len, stream)) != -1) & (i <= 2)) {
+  while (((read = getline(&line, &len, stream)) != -1)) {
     printf("Retrieved line %d of length %zu :\n", i, read);
     printf("%s", line);
     i++;
